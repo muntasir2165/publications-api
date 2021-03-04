@@ -1,0 +1,22 @@
+{
+  "name": "publications-api",
+  "version": "1.0.0",
+  "description": "REST API for Publication Data",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server",
+    "deleteData": "node seeder -d",
+    "importData": "node seeder -i",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Muntasir Biojid",
+  "license": "ISC",
+  "dependencies": {
+    "colors": "^1.4.0",
+    "dotenv": "^8.2.0",
+    "mongoose": "^5.11.18"
+  },
+  "devDependencies": {
+    "line-reader": "^0.4.0"
+  }
+}
