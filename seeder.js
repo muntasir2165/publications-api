@@ -12,28 +12,32 @@ const Publication = require('./models/publication');
 const splitCSVButIgnoreCommasInDoublequotes = (str) => {
   //split the str first
   //then merge the elments between two double quotes
-  var delimiter = ',';
-  var quotes = '"';
-  var elements = str.split(delimiter);
-  var newElements = [];
-  for (var i = 0; i < elements.length; ++i) {
+  let delimiter = ',';
+  let quotes = '"';
+  let elements = str.split(delimiter);
+  let newElements = [];
+
+  for (let i = 0; i < elements.length; ++i) {
     if (elements[i].indexOf(quotes) >= 0) {
       //the left double quotes is found
-      var indexOfRightQuotes = -1;
-      var tmp = elements[i];
+      let indexOfRightQuotes = -1;
+      let tmp = elements[i];
+
       //find the right double quotes
-      for (var j = i + 1; j < elements.length; ++j) {
+      for (let j = i + 1; j < elements.length; ++j) {
         if (elements[j].indexOf(quotes) >= 0) {
           indexOfRightQuotes = j;
           break;
         }
       }
+
       //found the right double quotes
       //merge all the elements between double quotes
       if (-1 != indexOfRightQuotes) {
-        for (var j = i + 1; j <= indexOfRightQuotes; ++j) {
+        for (let j = i + 1; j <= indexOfRightQuotes; ++j) {
           tmp = tmp + delimiter + elements[j];
         }
+
         newElements.push(tmp.replace(/"/g, '').trim());
         i = indexOfRightQuotes;
       } else {
@@ -59,7 +63,7 @@ const splitCSVButIgnoreCommasInDoublequotes = (str) => {
       useUnifiedTopology: true,
     });
 
-    console.log('Connected to MongoDB'.blue.inverse);
+    console.log('Connected to MongoDB!'.blue.inverse);
   } catch (error) {
     console.error(error.message);
     process.exit(1);
@@ -68,6 +72,7 @@ const splitCSVButIgnoreCommasInDoublequotes = (str) => {
 
 const importData = async () => {
   let count = 0;
+
   lineReader.eachLine(
     `${__dirname}/seedData/publication-list.csv`,
     async (line, last) => {
@@ -75,7 +80,7 @@ const importData = async () => {
       const valuesArray = splitCSVButIgnoreCommasInDoublequotes(line);
       const publicationType = valuesArray[0];
       const title = valuesArray[1];
-      const authors = valuesArray[2] || 'Author Unknown';
+      const authors = valuesArray[2] || 'Author unknown';
       const creationDate = valuesArray[3];
 
       // count === 1 implies line 1 which header row for the csv data
@@ -92,7 +97,7 @@ const importData = async () => {
           const publication = await newPublication.save();
 
           if (last) {
-            console.log('Default Publication Data Imported!'.green.inverse);
+            console.log('Default publication data imported!'.green.inverse);
             process.exit();
           }
         } catch (error) {
@@ -106,8 +111,7 @@ const importData = async () => {
 const deleteData = async () => {
   try {
     await Publication.deleteMany();
-
-    console.log('All Publication Data Destroyed!'.red.inverse);
+    console.log('All publication data destroyed!'.red.inverse);
     process.exit();
   } catch (error) {
     console.error(error);

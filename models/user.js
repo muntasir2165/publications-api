@@ -1,51 +1,40 @@
-const jwt = require('jsonwebtoken');
+const mongoose = require('mongoose');
+const Schema = mongoose.Schema;
+const bcrypt = require('bcryptjs');
 
-const { SECRET_KEY } = require('./../config');
-const User = require('./../models/user');
+const userSchema = new Schema({
+  firstName: { type: String, required: true },
+  lastName: { type: String, required: true },
+  email: {
+    type: String,
+    required: true,
+    unique: true,
+    lowercase: true,
+    validate: [emailValidator, 'incorrect mail format'],
+  },
+  password: { type: String, required: true },
+});
 
-exports.register = async (req, res, next) => {
-  const { firstName, lastName, email, password } = req.body;
-  const user = await User.findOne({ email });
-  if (user)
-    return res
-      .status(403)
-      .json({ error: { message: 'Email already in use!' } });
-  const newUser = new User({ firstName, lastName, email, password });
+function emailValidator(value) {
+  return /^.+@.+\..+$/.test(value);
+}
+
+userSchema.pre('save', async function (next) {
   try {
-    await newUser.save();
-    const token = getSignedToken(newUser);
-    res.status(200).json({ token });
+    const salt = await bcrypt.genSalt(10);
+    const passwordHash = await bcrypt.hash(this.password, salt);
+    this.password = passwordHash;
+    next();
   } catch (error) {
-    error.status = 400;
     next(error);
   }
-};
+});
 
-exports.login = async (req, res, next) => {
-  const { email, password } = req.body;
-  const user = await User.findOne({ email });
-  if (!user)
-    return res
-      .status(403)
-      .json({ error: { message: 'Invalid email/password' } });
-  const isValid = await user.isPasswordValid(password);
-  if (!isValid)
-    return res
-      .status(403)
-      .json({ error: { message: 'Invalid email/password' } });
-  const token = getSignedToken(user);
-  res.status(200).json({ token });
+userSchema.methods.isPasswordValid = async function (value) {
+  try {
+    return bcrypt.compare(value, this.password);
+  } catch (error) {
+    throw new Error(error);
+  }
 };
-
-getSignedToken = (user) => {
-  return jwt.sign(
-    {
-      id: user._id,
-      email: user.email,
-      firstName: user.firstName,
-      lastName: user.lastName,
-    },
-    SECRET_KEY,
-    { expiresIn: '1h' }
-  );
-};
+module.exports = mongoose.model('user', userSchema);
