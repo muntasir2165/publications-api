@@ -9,8 +9,8 @@ exports.postPublication = async (req, res, next) => {
   const newPublication = new Publication(req.body);
   newPublication.createdBy = req.user.id;
   try {
-    const note = await newPublication.save();
-    res.status(201).json(note);
+    const publication = await newPublication.save();
+    res.status(201).json(publication);
   } catch (error) {
     error.status = 400;
     next(error);
@@ -20,8 +20,8 @@ exports.postPublication = async (req, res, next) => {
 exports.getPublicationById = async (req, res, next) => {
   const { publicationId } = req.params;
   try {
-    const note = await Publication.findById(publicationId);
-    res.status(200).json(note);
+    const publication = await Publication.findById(publicationId);
+    res.status(200).json(publication);
   } catch (error) {
     error.status = 400;
     next(error);
@@ -44,6 +44,16 @@ exports.deletePublication = async (req, res, next) => {
   try {
     await Publication.findByIdAndRemove(publicationId);
     res.status(200).json({ success: true });
+  } catch (error) {
+    error.status = 400;
+    next(error);
+  }
+};
+
+exports.getPublicationsByLoggedInUser = async (req, res, next) => {
+  try {
+    const publications = await Publication.find({ createdBy: req.user.id });
+    res.status(200).json(publications);
   } catch (error) {
     error.status = 400;
     next(error);

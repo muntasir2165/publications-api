@@ -4,6 +4,7 @@ const express = require('express');
 const mongoose = require('mongoose');
 
 const publicationRoutes = require('./routes/publication');
+const publicationsByLoggedInUserRoute = require('./routes/publicationsByLoggedInUser');
 const userRoutes = require('./routes/user');
 const auth = require('./middleware/auth');
 
@@ -20,6 +21,11 @@ app.use(express.json());
 // app.get('/', (req, res, next) => res.end('Welcome!'));
 
 app.use('/api/publications', auth, publicationRoutes);
+app.use(
+  '/api/publicationsbyloggedinuser',
+  auth,
+  publicationsByLoggedInUserRoute
+);
 app.use('/api/users', userRoutes);
 
 // the following handles undefined routes in our app
