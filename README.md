@@ -33,7 +33,7 @@ https://publications-api.herokuapp.com/
 
    - rename `rename.env` to `.env`
    - once you have the DB URL, specify that in the.env file (or you can keep the default value if the DB is running locally at port 27017):
-   - feel free to update the other environment variables of keep them as is
+   - feel free to update the other environment variables or keep them as is
 
    ```
    MONGODB_URL="mongodb://localhost:27017/publications"
