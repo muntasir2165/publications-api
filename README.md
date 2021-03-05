@@ -6,7 +6,7 @@ A complete RESTful API created using Node.js and Express. We have used MongoDB a
 Apart from this, we have used JSON Web Token (JWT) to add authentication. Using JWT, we can protect certain endpoints and ensure that user must be logged-in to access those.
 
 ## Deployed API at Heroku
-https://publications-api.herokuapp.com/ 
+https://publications-api.herokuapp.com 
 ## Setup and Installation
 
 1. **Clone the repo from GitHub**
@@ -14,10 +14,12 @@ https://publications-api.herokuapp.com/
    git clone https://github.com/muntasir2165/publications-api.git
    cd publications-api
    ```
+
 2. **Install all npm dependencies**
    ```sh
    npm install
    ```
+   
 3. **Setup MongoDB**
 
    There are lots of options available to have a running MongoDB instance:
