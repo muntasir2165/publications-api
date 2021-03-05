@@ -1,4 +1,5 @@
 const colors = require('colors');
+const cors = require('cors');
 const dotenv = require('dotenv');
 const express = require('express');
 const mongoose = require('mongoose');
@@ -16,6 +17,9 @@ const app = express();
 
 // Parse request body as JSON
 app.use(express.json());
+
+// Enable CORS
+app.use(cors());
 
 // for testing purposes:
 // app.get('/', (req, res, next) => res.end('Welcome!'));
