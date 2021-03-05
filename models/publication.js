@@ -20,7 +20,7 @@ const publicationSchema = new Schema({
   title: { type: String, required: true },
   authors: { type: String, required: true },
   createdBy: { type: Schema.Types.ObjectId, ref: 'user', default: null },
-  creationDate: { type: Date, default: Date.now },
+  creationDate: { type: String, required: true },
 });
 
 module.exports = mongoose.model('publication', publicationSchema);
