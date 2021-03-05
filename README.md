@@ -5,6 +5,8 @@ REST API for publications data.
 A complete RESTful API created using Node.js and Express. We have used MongoDB as the database and mongoose as the ORM library which makes it easier to interact with MongoDB.
 Apart from this, we have used JSON Web Token (JWT) to add authentication. Using JWT, we can protect certain endpoints and ensure that user must be logged-in to access those.
 
+## Deployed API at Heroku
+https://publications-api.herokuapp.com/ 
 ## Setup and Installation
 
 1. **Clone the repo from GitHub**
